@@ -43,7 +43,8 @@ The dataset contains information on layoffs globally, including company, locatio
 5. **Column and Row Removal**:
   
 ---
-
+## 🌟 Key Features & Methodologies
+---
 ### Step 1: Creating Database and Importing Raw Data
 
 - Created a new schema for the project:
