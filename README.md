@@ -43,7 +43,8 @@ This project showcases a thorough data cleaning workflow applied to a real-world
 ### Step 1: Creating Database and Importing Raw Data
 
 - Created a new schema for the project:
-![Creating schema](Creating schema.png)
+
+![Creating schema](Creating%20schema.png)
 
 - Imported the layoffs dataset into a table named `layoffs` using MySQL’s Table Data Import Wizard, keeping the raw data intact without modifying import settings (e.g., date imported as text).
 
