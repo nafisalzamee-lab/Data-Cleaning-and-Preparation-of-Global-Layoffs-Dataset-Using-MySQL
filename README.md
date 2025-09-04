@@ -1,12 +1,7 @@
 # Data-Cleaning-and-Preparation-of-Global-Layoffs-Dataset-Using-MySQL
-### Project: Data Cleaning and Preparation of Global Layoffs Dataset Using MySQL
-
-This project showcases a thorough data cleaning workflow applied to a real-world global layoffs dataset using MySQL. The raw data was transformed into a clean, standardized, and analysis-ready format through a series of SQL-based operations, reflecting real-world data engineering and ETL best practices.
-
----
 
 #### Project Overview:
-The dataset contains information on layoffs globally, including company, location, industry, total layoffs, percentage laid off, date, company stage, country, and funds raised. The raw data was imported into a MySQL schema named `world_layoffs` and cleaned to enable accurate exploratory data analysis.
+This project showcases a thorough data cleaning workflow applied to a real-world global layoffs dataset using MySQL. The raw data was transformed into a clean, standardized, and analysis-ready format through a series of SQL-based operations, reflecting real-world data engineering and ETL best practices.The dataset contains information on layoffs globally, including company, location, industry, total layoffs, percentage laid off, date, company stage, country, and funds raised. The raw data was imported into a MySQL schema named `world_layoffs` and cleaned to enable accurate exploratory data analysis.
 
 ---
 ### Technologies and Skills Demonstrated:
