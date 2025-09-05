@@ -1,4 +1,7 @@
 # Data-Cleaning-and-Preparation-of-Global-Layoffs-Dataset-Using-MySQL
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![SQL Database](https://img.shields.io/badge/SQL%20Database-2E8B57?style=for-the-badge&logo=azuredevops&logoColor=white)
+
 [![YouTube](https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube)](https://youtu.be/X4ee_lMhEmU)
 [![Connect with me on LinkedIn](https://img.shields.io/badge/Connect%20with%20me-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/md-nafis-al-zamee-a88a9024b)
 #### 📊Project Overview:
@@ -286,8 +289,7 @@ This project involved importing raw data, creating staging environments, removin
 With the cleaned `layoffs_staging_2` table ready, the dataset is now primed for advanced exploratory data analysis and insightful visualizations, forming a strong foundation for data-driven decision-making.
 
 ---
+If you want to see the whole SQL script Click [**Here**]()
 
-
-This detailed project description, combined with exact SQL queries, provides a transparent, technical narrative of the data cleaning process, making it ideal for showcasing your SQL proficiency in a portfolio.
 
 [![Connect with me on LinkedIn](https://img.shields.io/badge/Connect%20with%20me-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/md-nafis-al-zamee-a88a9024b)
