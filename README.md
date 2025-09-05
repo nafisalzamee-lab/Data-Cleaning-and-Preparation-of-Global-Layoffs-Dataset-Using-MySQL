@@ -289,7 +289,7 @@ This project involved importing raw data, creating staging environments, removin
 With the cleaned `layoffs_staging_2` table ready, the dataset is now primed for advanced exploratory data analysis and insightful visualizations, forming a strong foundation for data-driven decision-making.
 
 ---
-If you want to see the whole SQL script Click [**Here**](https://github.com/nafisalzamee-lab/Data-Cleaning-and-Preparation-of-Global-Layoffs-Dataset-Using-MySQL/blob/main/Data%20Cleaning%20&%20Preparation%20Using%20MySQL.sql)
+If you want to see the whole SQL script Click [**Here**](https://github.com/nafisalzamee-lab/Data-Cleaning-and-Preparation-of-Global-Layoffs-Dataset-Using-MySQL/blob/main/SQL%20Script%20of%20Data%20Cleaning%20%26%20Preparation%20Using%20MySQL.sql)
 
 
 [![Connect with me on LinkedIn](https://img.shields.io/badge/Connect%20with%20me-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/md-nafis-al-zamee-a88a9024b)
