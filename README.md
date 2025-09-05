@@ -1,10 +1,11 @@
 # Data-Cleaning-and-Preparation-of-Global-Layoffs-Dataset-Using-MySQL
-
-#### Project Overview:
+[![YouTube](https://img.shields.io/badge/Watch%20on-YouTube-red?logo=youtube)](https://youtu.be/X4ee_lMhEmU)
+[![Connect with me on LinkedIn](https://img.shields.io/badge/Connect%20with%20me-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/md-nafis-al-zamee-a88a9024b)
+#### 📊Project Overview:
 This project showcases a thorough data cleaning workflow applied to a real-world global layoffs dataset using MySQL. The raw data was transformed into a clean, standardized, and analysis-ready format through a series of SQL-based operations, reflecting real-world data engineering and ETL best practices.The dataset contains information on layoffs globally, including company, location, industry, total layoffs, percentage laid off, date, company stage, country, and funds raised. The raw data was imported into a MySQL schema named `world_layoffs` and cleaned to enable accurate exploratory data analysis.
 
 ---
-### Technologies and Skills Demonstrated:
+### 🛠️Technologies and Skills Demonstrated:
 - MySQL database creation and management  
 - Data import and export via MySQL Workbench  
 - Advanced SQL window functions (`ROW_NUMBER()`, `PARTITION BY`)  
@@ -14,7 +15,7 @@ This project showcases a thorough data cleaning workflow applied to a real-world
 - Data filtering and deletion for quality assurance  
 
 ---
-### Data Set Details:
+### 🗂️Data Set Details:
 - The dataset contains **2,361 records** of layoffs worldwide.
 - Key columns include:
   - **Company**: Name of the company issuing layoffs.
@@ -30,7 +31,7 @@ This project showcases a thorough data cleaning workflow applied to a real-world
 
 ---
 
-### Key Processes Performed:
+### 🛠️🧩Key Processes Performed:
 1. **Duplicate Detection and Removal**: 
 2. **Data Standardization**:  
 3. **Handling Nulls and Missing Values**:   
@@ -265,12 +266,12 @@ and percentage_laid_off is null
 ```
 
 ---
-- **Best Practices Followed:**
+- **🏆Best Practices Followed:**
   - Maintained the original raw dataset intact by creating separate staging tables for cleaning operations, mimicking real-world ETL workflows.
   - Iterative, exploratory approach allowed troubleshooting and refinement of queries to handle edge cases and data anomalies.
   - Employed SQL scripting and procedural thinking to automate data cleaning tasks, paving the way for scalable and repeatable data preprocessing pipelines.
 ---
-### Project Outcome:
+### 🎯 Project Outcome:
 - Successfully transformed a raw, unstructured layoffs dataset into a clean, consistent, and reliable staging database.
 - Enabled accurate and meaningful future **exploratory data analysis** by ensuring data integrity and standardization.
 - Demonstrated practical, real-world techniques for cleaning data in MySQL, including handling duplicates, null values, inconsistent categories, and data type conversions.
@@ -278,7 +279,7 @@ and percentage_laid_off is null
 - Created a valuable portfolio project showcasing advanced SQL skills and data cleaning processes that are highly relevant to data engineering and analytics roles.
 - Prepared the dataset for the next phase of analysis, where trends, patterns, and insights about layoffs across industries and geographies can be explored effectively.
 ---
-### Summary
+### 📄Summary
 
 This project involved importing raw data, creating staging environments, removing duplicates via advanced window functions, standardizing textual data, converting data types appropriately, imputing missing values through self-joins, and cleaning irrelevant data. The SQL code was carefully crafted to reflect real-world data cleaning challenges and best practices.
 
@@ -289,3 +290,4 @@ With the cleaned `layoffs_staging_2` table ready, the dataset is now primed for 
 
 This detailed project description, combined with exact SQL queries, provides a transparent, technical narrative of the data cleaning process, making it ideal for showcasing your SQL proficiency in a portfolio.
 
+[![Connect with me on LinkedIn](https://img.shields.io/badge/Connect%20with%20me-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/md-nafis-al-zamee-a88a9024b)
