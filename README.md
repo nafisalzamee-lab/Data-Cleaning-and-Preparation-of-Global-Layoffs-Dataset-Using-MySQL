@@ -47,7 +47,7 @@ This project showcases a thorough data cleaning workflow applied to a real-world
 ![Creating schema](Creating%20schema.png)
 
 - Imported the layoffs dataset into a table named `layoffs` using MySQL’s Table Data Import Wizard, keeping the raw data intact without modifying import settings (e.g., date imported as text).
-
+![Importing Data](importing%20data.png)
 ---
 
 ### Step 2: Creating a Staging Table for Data Cleaning
@@ -55,10 +55,11 @@ This project showcases a thorough data cleaning workflow applied to a real-world
 To preserve raw data integrity and enable safe cleaning, a staging table was created by copying all data from the raw `layoffs` table:
 
 ```sql
-CREATE TABLE layoffs_staging LIKE layoffs;
+select *
+from layoffs;
 
-INSERT INTO layoffs_staging
-SELECT * FROM layoffs;
+create table layoff_staging
+like layoffs;
 ```
 
 This approach aligns with best practices to avoid direct modification of raw data.
@@ -70,55 +71,64 @@ This approach aligns with best practices to avoid direct modification of raw dat
 Since the dataset lacked a unique identifier, duplicates were detected using a window function `ROW_NUMBER()` partitioned by all relevant columns to identify identical rows:
 
 ```sql
-WITH duplicate_CTE AS (
-  SELECT *,
-    ROW_NUMBER() OVER (
-      PARTITION BY company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, entry, funds_raised_millions
-      ORDER BY company
-    ) AS row_num
-  FROM layoffs_staging
-)
-SELECT * FROM duplicate_CTE WHERE row_num > 1;
+ select * , 
+ Row_number() over(partition by company, location, industry,total_laid_off,'date',stage,country,funds_raised_millions) as row_num
+ from layoff_staging;
+ 
+ with duplicate_cte as
+	(select * , 
+ Row_number()
+ over(partition by company, location, industry,total_laid_off,'date',stage,country,funds_raised_millions) as row_num
+ from layoff_staging )
+
+ select * from duplicate_cte where row_num>1;
 ```
 
 After identifying duplicates, a new table `layoffs_staging_2` was created with an additional column `row_num`:
 
 ```sql
-CREATE TABLE layoffs_staging_2 (
-  company VARCHAR(255),
-  location VARCHAR(255),
-  industry VARCHAR(255),
-  total_laid_off INT,
-  percentage_laid_off FLOAT,
-  `date` VARCHAR(50),
-  stage VARCHAR(50),
-  entry VARCHAR(50),
-  funds_raised_millions FLOAT,
-  row_num INT
-);
+CREATE TABLE `layoff_staging2` (
+  `company` text,
+  `location` text,
+  `industry` text,
+  `total_laid_off` int DEFAULT NULL,
+  `percentage_laid_off` text,
+  `date` text,
+  `stage` text,
+  `country` text,
+  `funds_raised_millions` int DEFAULT NULL,
+  `row_num` INT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO layoffs_staging_2
-SELECT company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, entry, funds_raised_millions, row_num
-FROM (
-  SELECT *,
-    ROW_NUMBER() OVER (
-      PARTITION BY company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, entry, funds_raised_millions
-      ORDER BY company
-    ) AS row_num
-  FROM layoffs_staging
-) AS subquery;
+Select *
+from layoff_staging2;
+
+insert into layoff_staging2
+ select * , 
+ Row_number()
+ over(partition by company, location, industry,total_laid_off,'date',stage,country,funds_raised_millions) as row_num
+ from layoff_staging;
 ```
 
 Duplicates (rows where `row_num > 1`) were deleted from this table:
 
 ```sql
-DELETE FROM layoffs_staging_2 WHERE row_num > 1;
+ Delete 
+from layoff_staging2
+where row_num>1;
 ```
 
-Finally, the auxiliary column was dropped to clean up the schema:
+the auxiliary column was dropped to clean up the schema:
+```sql
+alter table layoff_staging2
+drop column row_num;
+```
+Finally, re-enable safe updates after execution
 
 ```sql
-ALTER TABLE layoffs_staging_2 DROP COLUMN row_num;
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM layoff_staging2 WHERE row_num > 1;
+SET SQL_SAFE_UPDATES = 1; 
 ```
 
 ---
@@ -130,8 +140,12 @@ ALTER TABLE layoffs_staging_2 DROP COLUMN row_num;
 Whitespace inconsistencies were removed using the `TRIM()` function:
 
 ```sql
-UPDATE layoffs_staging_2
-SET company = TRIM(company);
+select company, 
+ (trim(company))
+from layoff_staging2;
+
+update layoff_staging2
+set company =trim(company);
 ```
 
 #### 4.2 Normalizing Industry Labels
@@ -139,9 +153,13 @@ SET company = TRIM(company);
 Example: Multiple variations of "crypto" such as "cryptocurrency", "crypto", and typos like "crypt" were standardized to "crypto" using pattern matching and update:
 
 ```sql
-UPDATE layoffs_staging_2
-SET industry = 'crypto'
-WHERE industry LIKE 'crypto%';
+select *
+from layoff_staging2
+where industry like "crypto%";
+
+update layoff_staging2
+set industry = "Crypto"
+where industry like "crypto%";
 ```
 
 #### 4.3 Fixing Country Names with Trailing Characters
@@ -149,9 +167,18 @@ WHERE industry LIKE 'crypto%';
 A trailing period in some country names was removed using `TRIM(TRAILING ...)`:
 
 ```sql
-UPDATE layoffs_staging_2
-SET country = TRIM(TRAILING '.' FROM country)
-WHERE country LIKE 'United States.%';
+select *
+from layoff_staging2
+where country like "United States%";
+
+select distinct country, trim(trailing "." from country)
+from layoff_staging2
+order by 1;
+
+
+update layoff_staging2
+set country = trim(trailing "." from country)
+where country like "United States%";
 ```
 
 ---
@@ -161,15 +188,23 @@ WHERE country LIKE 'United States.%';
 Because the `date` column was imported as text, it was converted to MySQL’s `DATE` type using `STR_TO_DATE()`:
 
 ```sql
-UPDATE layoffs_staging_2
-SET `date` = STR_TO_DATE(`date`, '%m/%d/%Y');
+select `date`,
+str_to_date(`date`,'%m/%d/%Y')
+from layoff_staging2;
+
+
+update layoff_staging2
+set `date` = str_to_date(`date`,'%m/%d/%Y');
 ```
 
 Then, the column was altered to enforce the `DATE` datatype:
 
 ```sql
-ALTER TABLE layoffs_staging_2
-MODIFY COLUMN `date` DATE;
+select `date`
+from layoff_staging2;
+
+alter table layoff_staging2
+modify column `date` date ;
 ```
 
 ---
@@ -181,8 +216,10 @@ MODIFY COLUMN `date` DATE;
 To find rows with null or blank values in critical columns like `industry`:
 
 ```sql
-SELECT * FROM layoffs_staging_2
-WHERE industry IS NULL OR industry = '';
+select *
+from layoff_staging2
+where total_laid_off is null
+and percentage_laid_off is null;
 ```
 
 #### 6.2 Populating Missing Industry Data by Self-Join
@@ -190,20 +227,28 @@ WHERE industry IS NULL OR industry = '';
 Rows with missing `industry` values were updated by joining on company and location to find corresponding non-null values:
 
 ```sql
-UPDATE layoffs_staging_2 AS T1
-JOIN layoffs_staging_2 AS T2
-  ON T1.company = T2.company AND T1.location = T2.location
-SET T1.industry = T2.industry
-WHERE (T1.industry IS NULL OR T1.industry = '')
-  AND T2.industry IS NOT NULL;
+select t1.industry, t2.industry
+from layoff_staging2 t1
+join layoff_staging2 t2
+ on t1.company= t2.company
+ and t1.location=t2.location
+where t1.industry is null 
+and t2.industry is not null;
+
+update layoff_staging2 t1
+join layoff_staging2 t2
+ on t1.company= t2.company
+set t1.industry = t2.industry
+where (t1.industry is null or t1.industry="")
+and t2.industry is not null;
 ```
 
 First, blanks were converted to `NULL` for consistency:
 
 ```sql
-UPDATE layoffs_staging_2
-SET industry = NULL
-WHERE industry = '';
+update layoff_staging2
+set industry = null
+where industry="";
 ```
 
 ---
@@ -213,10 +258,17 @@ WHERE industry = '';
 Rows where both `total_laid_off` and `percentage_laid_off` are NULL were considered unreliable and deleted:
 
 ```sql
-DELETE FROM layoffs_staging_2
-WHERE total_laid_off IS NULL AND percentage_laid_off IS NULL;
+delete
+from layoff_staging2
+where total_laid_off is null
+and percentage_laid_off is null
 ```
 
+---
+- **Best Practices Followed:**
+  - Maintained the original raw dataset intact by creating separate staging tables for cleaning operations, mimicking real-world ETL workflows.
+  - Iterative, exploratory approach allowed troubleshooting and refinement of queries to handle edge cases and data anomalies.
+  - Employed SQL scripting and procedural thinking to automate data cleaning tasks, paving the way for scalable and repeatable data preprocessing pipelines.
 ---
 ### Project Outcome:
 - Successfully transformed a raw, unstructured layoffs dataset into a clean, consistent, and reliable staging database.
